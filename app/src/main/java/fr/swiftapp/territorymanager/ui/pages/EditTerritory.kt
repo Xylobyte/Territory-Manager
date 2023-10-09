@@ -216,6 +216,8 @@ fun EditTerritory(database: TerritoryDatabase, navController: NavHostController,
                 modifier = Modifier.padding(0.dp, 5.dp),
                 color = Color.Red
             )
+
+        Spacer(modifier = Modifier.height(20.dp))
     }
 
     if (showDialog)

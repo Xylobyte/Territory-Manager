@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,6 +32,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -38,6 +41,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
@@ -54,6 +58,7 @@ import fr.swiftapp.territorymanager.data.Territory
 import fr.swiftapp.territorymanager.data.TerritoryDatabase
 import fr.swiftapp.territorymanager.settings.getNameList
 import fr.swiftapp.territorymanager.settings.updateNamesList
+import fr.swiftapp.territorymanager.ui.dialogs.ViewNamesDialog
 import fr.swiftapp.territorymanager.ui.theme.TerritoryManagerTheme
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -133,6 +138,9 @@ class SettingsActivity : ComponentActivity() {
             }
 
         setContent {
+            val scrollBehavior =
+                TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+
             TerritoryManagerTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -150,9 +158,11 @@ class SettingsActivity : ComponentActivity() {
                                 },
                                 title = {
                                     Text(text = "Options")
-                                }
+                                },
+                                scrollBehavior = scrollBehavior
                             )
-                        }
+                        },
+                        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
                     ) {
                         SettingsItems(it)
                     }
@@ -183,9 +193,17 @@ fun SettingsItems(padding: PaddingValues) {
         }
     }
 
+    ViewNamesDialog(
+        isOpen = openDialog.value,
+        names = names,
+        close = { openDialog.value = false },
+        updateNames = { i -> names.removeAt(i); updateNames() }
+    )
+
     Column(
         modifier = Modifier
             .padding(padding)
+            .verticalScroll(rememberScrollState())
             .padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -312,75 +330,5 @@ fun SettingsItems(padding: PaddingValues) {
             textDecoration = TextDecoration.Underline,
             fontStyle = FontStyle.Italic
         )
-    }
-
-    if (openDialog.value) {
-        Dialog(
-            onDismissRequest = {
-                openDialog.value = false
-            }
-        ) {
-            Surface(
-                shape = MaterialTheme.shapes.large,
-                tonalElevation = AlertDialogDefaults.TonalElevation,
-                modifier = Modifier.height(400.dp)
-            ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    if (names.isNotEmpty())
-                        Column(
-                            modifier = Modifier
-                                .weight(1f)
-                                .verticalScroll(rememberScrollState())
-                        ) {
-                            names.forEachIndexed { index, item ->
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    modifier = Modifier.fillMaxWidth()
-                                ) {
-                                    Text(
-                                        text = item,
-                                        fontSize = 16.sp,
-                                        overflow = TextOverflow.Ellipsis,
-                                        maxLines = 1,
-                                        modifier = Modifier
-                                            .padding(10.dp, 0.dp, 0.dp, 0.dp)
-                                            .weight(1f)
-                                    )
-                                    TextButton(
-                                        onClick = {
-                                            names.removeAt(index)
-                                            updateNames()
-                                        }
-                                    ) {
-                                        Icon(
-                                            painter = painterResource(id = R.drawable.rounded_delete_24),
-                                            contentDescription = "Delete"
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    else
-                        Text(text = "Aucun nom enregistré")
-
-                    Spacer(modifier = Modifier.height(15.dp))
-                    Row {
-                        Spacer(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f)
-                        )
-                        TextButton(
-                            onClick = {
-                                openDialog.value = false
-                            },
-                        ) {
-                            Text("Fermer")
-                        }
-                    }
-                }
-            }
-        }
     }
 }

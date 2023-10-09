@@ -136,6 +136,8 @@ fun AddTerritoryPage(database: TerritoryDatabase, navController: NavHostControll
                 modifier = Modifier.padding(0.dp, 5.dp),
                 color = Color.Red
             )
+
+        Spacer(modifier = Modifier.height(20.dp))
     }
 }
 
@@ -201,7 +203,6 @@ class PhoneVisualTransformation(val mask: String, val maskNumber: Char) : Visual
 }
 
 private class PhoneOffsetMapper(val mask: String, val numberChar: Char) : OffsetMapping {
-
     override fun originalToTransformed(offset: Int): Int {
         var noneDigitCount = 0
         var i = 0

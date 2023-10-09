@@ -40,9 +40,9 @@ fun ViewNamesDialog(
             }
         ) {
             Surface(
-                shape = MaterialTheme.shapes.large,
+                shape = MaterialTheme.shapes.extraLarge,
                 tonalElevation = AlertDialogDefaults.TonalElevation,
-                modifier = Modifier.height(400.dp).padding(10.dp)
+                modifier = Modifier.height(400.dp)
             ) {
                 Column(
                     modifier = Modifier

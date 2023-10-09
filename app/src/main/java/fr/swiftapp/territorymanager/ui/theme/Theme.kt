@@ -17,26 +17,33 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80,
-    background = Color(0xFF000000)
+    surfaceVariant = Color(0xFF342B2C),
+    outline = Color(0xFFA68B7E),
+    primary = Color(0xFFB3C5FF),
+    onPrimary = Color(0xFF152C68),
+    background = Color(0xFF251913),
+    secondaryContainer = Color(0xFF3F4B26),
+    onSecondaryContainer = Color(0xFFCBDBA9),
+    surface = Color(0xFF251913),
+    onSurface = Color(0xFFF5DED4),
+    onSurfaceVariant = Color(0xFFF5DED4),
+    errorContainer = Color(0xFFFF1F1F),
+    onErrorContainer = Color(0xFFFFFFFF)
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40,
-    background = Color(0xFFFFFFFF)
-
-    /* Other default colors to override
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    surfaceVariant = Color(0xFFFCDCCD),
+    outline = Color(0xFF8A7164),
+    primary = Color(0xFF475C99),
+    onPrimary = Color(0xFFFFFFFF),
+    background = Color(0xFFFFFBFA),
+    secondaryContainer = Color(0xFFD9E9B6),
+    onSecondaryContainer = Color(0xFF1B2608),
+    surface = Color(0xFFFFFBFA),
+    onSurface = Color(0xFF251913),
+    onSurfaceVariant = Color(0xFF584237),
+    errorContainer = Color(0xFFC01313),
+    onErrorContainer = Color(0xFFFFFFFF)
 )
 
 @Composable

@@ -32,12 +32,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import fr.swiftapp.territorymanager.R
 import fr.swiftapp.territorymanager.data.Territory
 import fr.swiftapp.territorymanager.data.TerritoryDatabase
+import fr.swiftapp.territorymanager.ui.dialogs.ConfirmationDialog
 import fr.swiftapp.territorymanager.utils.convertDate
 import fr.swiftapp.territorymanager.utils.reverseDate
 import kotlinx.coroutines.launch
@@ -120,7 +123,8 @@ fun EditTerritory(database: TerritoryDatabase, navController: NavHostController,
             onValueChange = { text -> number = text },
             label = { Text("Numéro") },
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Next
             ),
             modifier = Modifier.fillMaxWidth()
         )
@@ -132,7 +136,12 @@ fun EditTerritory(database: TerritoryDatabase, navController: NavHostController,
             singleLine = true,
             onValueChange = { text -> name = text },
             label = { Text("Nom du territoire") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(
+                autoCorrect = true,
+                imeAction = ImeAction.Next,
+                capitalization = KeyboardCapitalization.Words
+            )
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -162,7 +171,11 @@ fun EditTerritory(database: TerritoryDatabase, navController: NavHostController,
             singleLine = true,
             onValueChange = { text -> givenName = text },
             label = { Text("Nom du proclamateur") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(
+                autoCorrect = true,
+                capitalization = KeyboardCapitalization.Words
+            )
         )
 
         Spacer(modifier = Modifier.height(15.dp))
@@ -221,51 +234,18 @@ fun EditTerritory(database: TerritoryDatabase, navController: NavHostController,
     }
 
     if (showDialog)
-        ConfirmationDialog(onConfirm = {
-            showDialog = false
-            deleteItem()
-            navController.popBackStack()
-        }, {
-            showDialog = false
-        })
-}
-
-@Composable
-fun ConfirmationDialog(
-    onConfirm: () -> Unit,
-    onCancel: () -> Unit
-) {
-    AlertDialog(
-        onDismissRequest = {
-            onCancel()
-        },
-        confirmButton = {
-            Button(
-                onClick = { onConfirm() },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.errorContainer
-                )
-            ) {
-                Text(text = "Supprimer", color = MaterialTheme.colorScheme.onErrorContainer)
-            }
-        },
-        dismissButton = {
-            TextButton(
-                onClick = {
-                    onCancel()
-                }
-            ) {
-                Text(text = "Annuler")
-            }
-        },
-        title = {
-            Text(
-                text = "Suppression",
-                color = MaterialTheme.colorScheme.primary
-            )
-        },
-        text = {
-            Text(text = "Êtes-vous sûr de vouloir supprimer cet élément ?")
-        }
-    )
+        ConfirmationDialog(
+            title = "Suppression",
+            message = "Voulez-vous vraiment supprimer ce territoire ?",
+            confirmButtonColor = MaterialTheme.colorScheme.errorContainer,
+            confirmButtonTextColor = MaterialTheme.colorScheme.onErrorContainer,
+            confirmButtonText = "Supprimer",
+            onConfirm = {
+                showDialog = false
+                deleteItem()
+                navController.popBackStack()
+            },
+            onCancel = {
+                showDialog = false
+            })
 }

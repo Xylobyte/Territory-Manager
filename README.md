@@ -3,7 +3,7 @@
 An app to manage territory attribution.
 
 ## Screenshot
-<img src="/home/nantsa/Dev/Android/Territory-Manager/screenshots/home.png" width="300"/>
+<img src="/screenshots/home.png" width="300"/>
 
 ## Download
 

@@ -2,6 +2,7 @@ package fr.swiftapp.territorymanager
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.CalendarContract.Colors
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
@@ -41,6 +42,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -54,10 +56,12 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.lifecycleScope
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
+import com.google.gson.internal.GsonBuildConfig
 import fr.swiftapp.territorymanager.data.Territory
 import fr.swiftapp.territorymanager.data.TerritoryDatabase
 import fr.swiftapp.territorymanager.settings.getNameList
 import fr.swiftapp.territorymanager.settings.updateNamesList
+import fr.swiftapp.territorymanager.ui.components.HyperlinkText
 import fr.swiftapp.territorymanager.ui.dialogs.ViewNamesDialog
 import fr.swiftapp.territorymanager.ui.theme.TerritoryManagerTheme
 import kotlinx.coroutines.launch
@@ -67,10 +71,14 @@ import java.io.InputStream
 private lateinit var saveFileLauncher: ActivityResultLauncher<Intent>
 private lateinit var loadFileLauncher: ActivityResultLauncher<Intent>
 
+private lateinit var versionName: String
+
 class SettingsActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        versionName = packageManager.getPackageInfo(packageName, 0).versionName
 
         val db = TerritoryDatabase.getDatabase(this)
 
@@ -324,11 +332,26 @@ fun SettingsItems(padding: PaddingValues) {
             }
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
-        Text(
-            text = "Created by Nantsa",
-            textDecoration = TextDecoration.Underline,
-            fontStyle = FontStyle.Italic
+        Spacer(modifier = Modifier.height(30.dp))
+
+        Icon(
+            painter = painterResource(id = R.drawable.github_mark),
+            contentDescription = "GitHub logo",
+            modifier = Modifier.size(50.dp),
+            tint = MaterialTheme.colorScheme.onSurface
         )
+        Spacer(modifier = Modifier.height(10.dp))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = "This project is available on ",
+            )
+            HyperlinkText(fullText = "GitHub", hyperLinks = mapOf(
+                "GitHub" to "https://github.com/Swiftapp-hub/Territory-Manager"
+            ), linkTextColor = MaterialTheme.colorScheme.primary, linkTextFontWeight = FontWeight.Bold, linkTextDecoration = TextDecoration.Underline)
+        }
+
+        Spacer(modifier = Modifier.height(30.dp))
+
+        Text(text = "Version $versionName", color = MaterialTheme.colorScheme.outline)
     }
 }

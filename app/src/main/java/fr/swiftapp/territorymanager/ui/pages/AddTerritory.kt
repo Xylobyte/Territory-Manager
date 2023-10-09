@@ -26,6 +26,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
@@ -82,7 +84,8 @@ fun AddTerritoryPage(database: TerritoryDatabase, navController: NavHostControll
             onValueChange = { text -> number = text },
             label = { Text("Numéro") },
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Next
             ),
             modifier = Modifier.fillMaxWidth()
         )
@@ -94,7 +97,12 @@ fun AddTerritoryPage(database: TerritoryDatabase, navController: NavHostControll
             singleLine = true,
             onValueChange = { text -> name = text },
             label = { Text("Nom du territoire") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(
+                autoCorrect = true,
+                imeAction = ImeAction.Next,
+                capitalization = KeyboardCapitalization.Words
+            )
         )
 
         Spacer(modifier = Modifier.height(8.dp))

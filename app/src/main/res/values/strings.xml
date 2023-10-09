@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">Territory Manager</string>
+    <string name="app_name" translatable="false">Territory Manager</string>
     <string name="title_activity_settings">Settings</string>
 </resources>

@@ -7,7 +7,7 @@ An app to manage territory attribution.
 
 ## Download
 
-The first alpha version has been released !
+The alpha version has been released !
 
 To test it, go to the [release](https://github.com/Swiftapp-hub/Territory-Manager/releases) page and download the apk !
 

@@ -1,4 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="title_activity_settings">Réglages</string>
+    <string name="all">Tous</string>
+    <string name="in_progress">En cours</string>
+    <string name="available">Dispo</string>
+    <string name="territories">Territoires</string>
+    <string name="territories_in_working">Territoires en cours</string>
+    <string name="territories_dispo">Territoires disponibles</string>
+    <string name="add_territory">Ajouter un territoire</string>
+    <string name="details">Détails</string>
+    <string name="loading">Chargement...</string>
+    <string name="back">Retour</string>
+    <string name="settings">Réglages</string>
+    <string name="home">Accueil</string>
+    <string name="cancel">Annuler</string>
+    <string name="name_of_publisher">Nom du proclamateur</string>
+    <string name="save_and_assign">Enregistrer ce proclamateur et attribuer</string>
+    <string name="assign">Attribuer</string>
+    <string name="no_names">Aucun nom enregistré</string>
+    <string name="close">Fermer</string>
+    <string name="delete">Supprimer</string>
+    <string name="returned_on">Rentré le :</string>
+    <string name="released_on">Sorti le :</string>
+    <string name="number">Numéro</string>
+    <string name="territory_name">Nom du territoire</string>
+    <string name="date_dd_mm_yy">Date (jj/mm/aa)</string>
+    <string name="save">Enregistrer</string>
+    <string name="check_values">Verifiez les valeurs</string>
+    <string name="no_territories">No territories</string>
+    <string name="release_date_dd_mm_yy">Date de sortie (jj/mm/aa)</string>
+    <string name="return_date_dd_mm_yy">Return date (dd/mm/yy)</string>
+    <string name="deletion">Suppression</string>
+    <string name="deletion_confirm">Voulez-vous vraiment supprimer ce territoire ?</string>
+    <string name="confirmation">Confirmation</string>
+    <string name="confirm">Confirmer</string>
+    <string name="confirm_return_territory">Voulez vous vraiment rentrer le territoire %1$s ?</string>
+    <string name="import_backup">Importation</string>
+    <string name="import_warning">L\'importation d\'un fichier json remplacera toutes les données actuelles</string>
+    <string name="publishers">Proclamateurs</string>
+    <string name="publishers_info">La liste des noms de tout les proclamateurs</string>
+    <string name="export">Exporter</string>
+    <string name="export_info">Sauvegarder les noms et les territoires</string>
+    <string name="import_btn">Importer</string>
+    <string name="import_btn_info">Importer les noms et les territoires depuis un fichier .json</string>
+    <string name="project_github_info">"Ce projet est disponible sur "</string>
 </resources>

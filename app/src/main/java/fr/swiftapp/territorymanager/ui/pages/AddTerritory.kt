@@ -15,15 +15,21 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
@@ -37,13 +43,16 @@ import androidx.navigation.NavHostController
 import fr.swiftapp.territorymanager.R
 import fr.swiftapp.territorymanager.data.Territory
 import fr.swiftapp.territorymanager.data.TerritoryDatabase
+import fr.swiftapp.territorymanager.ui.components.MaskField
 import fr.swiftapp.territorymanager.utils.convertDate
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AddTerritoryPage(database: TerritoryDatabase, navController: NavHostController) {
     var number by remember {
-        mutableStateOf("0")
+        mutableStateOf("")
     }
     var name by remember {
         mutableStateOf("")
@@ -54,6 +63,15 @@ fun AddTerritoryPage(database: TerritoryDatabase, navController: NavHostControll
 
     var error by remember {
         mutableStateOf(false)
+    }
+
+    val focusRequester = remember { FocusRequester() }
+    val keyboard = LocalSoftwareKeyboardController.current
+
+    LaunchedEffect(focusRequester) {
+        focusRequester.requestFocus()
+        delay(100)
+        keyboard?.show()
     }
 
     val coroutineScope = rememberCoroutineScope()
@@ -82,12 +100,14 @@ fun AddTerritoryPage(database: TerritoryDatabase, navController: NavHostControll
             value = number,
             singleLine = true,
             onValueChange = { text -> number = text },
-            label = { Text("Numéro") },
+            label = { Text(stringResource(R.string.number)) },
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number,
+                keyboardType = KeyboardType.Decimal,
                 imeAction = ImeAction.Next
             ),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .focusRequester(focusRequester)
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -96,7 +116,7 @@ fun AddTerritoryPage(database: TerritoryDatabase, navController: NavHostControll
             value = name,
             singleLine = true,
             onValueChange = { text -> name = text },
-            label = { Text("Nom du territoire") },
+            label = { Text(stringResource(R.string.territory_name)) },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(
                 autoCorrect = true,
@@ -109,7 +129,7 @@ fun AddTerritoryPage(database: TerritoryDatabase, navController: NavHostControll
 
         MaskField(
             date = date,
-            text = "Date (jj/mm/aa)",
+            text = stringResource(R.string.date_dd_mm_yy),
             mask = "xx/xx/xx",
             maskNumber = 'x',
             onDateChanged = { date = it }
@@ -131,95 +151,20 @@ fun AddTerritoryPage(database: TerritoryDatabase, navController: NavHostControll
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.rounded_save_24),
-                    contentDescription = "Enregistrer"
+                    contentDescription = stringResource(R.string.save)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
-                Text(text = "Enregistrer")
+                Text(text = stringResource(R.string.save))
             }
         }
 
         if (error)
             Text(
-                text = "Verifiez les valeurs",
+                text = stringResource(R.string.check_values),
                 modifier = Modifier.padding(0.dp, 5.dp),
                 color = Color.Red
             )
 
         Spacer(modifier = Modifier.height(20.dp))
     }
-}
-
-@Composable
-fun MaskField(
-    date: String,
-    text: String,
-    modifier: Modifier = Modifier,
-    mask: String = "000 000 00 00",
-    maskNumber: Char = '0',
-    onDateChanged: (String) -> Unit
-) {
-    OutlinedTextField(
-        value = date,
-        onValueChange = { it ->
-            onDateChanged(it.take(mask.count { it == maskNumber }))
-        },
-        label = {
-            Text(text = text)
-        },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        visualTransformation = PhoneVisualTransformation(mask, maskNumber),
-        modifier = modifier.fillMaxWidth(),
-    )
-}
-
-class PhoneVisualTransformation(val mask: String, val maskNumber: Char) : VisualTransformation {
-
-    private val maxLength = mask.count { it == maskNumber }
-
-    override fun filter(text: AnnotatedString): TransformedText {
-        val trimmed = if (text.length > maxLength) text.take(maxLength) else text
-
-        val annotatedString = buildAnnotatedString {
-            if (trimmed.isEmpty()) return@buildAnnotatedString
-
-            var maskIndex = 0
-            var textIndex = 0
-            while (textIndex < trimmed.length && maskIndex < mask.length) {
-                if (mask[maskIndex] != maskNumber) {
-                    val nextDigitIndex = mask.indexOf(maskNumber, maskIndex)
-                    append(mask.substring(maskIndex, nextDigitIndex))
-                    maskIndex = nextDigitIndex
-                }
-                append(trimmed[textIndex++])
-                maskIndex++
-            }
-        }
-
-        return TransformedText(annotatedString, PhoneOffsetMapper(mask, maskNumber))
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is PhoneVisualTransformation) return false
-        if (mask != other.mask) return false
-        return maskNumber == other.maskNumber
-    }
-
-    override fun hashCode(): Int {
-        return mask.hashCode()
-    }
-}
-
-private class PhoneOffsetMapper(val mask: String, val numberChar: Char) : OffsetMapping {
-    override fun originalToTransformed(offset: Int): Int {
-        var noneDigitCount = 0
-        var i = 0
-        while (i < offset + noneDigitCount) {
-            if (mask[i++] != numberChar) noneDigitCount++
-        }
-        return offset + noneDigitCount
-    }
-
-    override fun transformedToOriginal(offset: Int): Int =
-        offset - mask.take(offset).count { it != numberChar }
 }

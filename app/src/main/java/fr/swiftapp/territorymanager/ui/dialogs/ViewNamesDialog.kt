@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -77,14 +78,14 @@ fun ViewNamesDialog(
                                     ) {
                                         Icon(
                                             painter = painterResource(id = R.drawable.rounded_delete_24),
-                                            contentDescription = "Delete"
+                                            contentDescription = stringResource(R.string.delete)
                                         )
                                     }
                                 }
                             }
                         }
                     else
-                        Text(text = "Aucun nom enregistré")
+                        Text(text = stringResource(R.string.no_names))
 
                     Spacer(modifier = Modifier.height(15.dp))
                     Row {
@@ -98,7 +99,7 @@ fun ViewNamesDialog(
                                 close()
                             },
                         ) {
-                            Text("Fermer")
+                            Text(stringResource(R.string.close))
                         }
                     }
                 }

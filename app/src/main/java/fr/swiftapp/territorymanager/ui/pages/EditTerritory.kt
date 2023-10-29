@@ -12,14 +12,12 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -32,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -40,6 +39,7 @@ import androidx.navigation.NavHostController
 import fr.swiftapp.territorymanager.R
 import fr.swiftapp.territorymanager.data.Territory
 import fr.swiftapp.territorymanager.data.TerritoryDatabase
+import fr.swiftapp.territorymanager.ui.components.MaskField
 import fr.swiftapp.territorymanager.ui.dialogs.ConfirmationDialog
 import fr.swiftapp.territorymanager.utils.convertDate
 import fr.swiftapp.territorymanager.utils.reverseDate
@@ -121,7 +121,7 @@ fun EditTerritory(database: TerritoryDatabase, navController: NavHostController,
             value = number,
             singleLine = true,
             onValueChange = { text -> number = text },
-            label = { Text("Numéro") },
+            label = { Text(stringResource(id = R.string.number)) },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Next
@@ -135,7 +135,7 @@ fun EditTerritory(database: TerritoryDatabase, navController: NavHostController,
             value = name,
             singleLine = true,
             onValueChange = { text -> name = text },
-            label = { Text("Nom du territoire") },
+            label = { Text(stringResource(R.string.territory_name)) },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(
                 autoCorrect = true,
@@ -148,7 +148,7 @@ fun EditTerritory(database: TerritoryDatabase, navController: NavHostController,
 
         MaskField(
             date = givenDate,
-            text = "Date de sortie (jj/mm/aa)",
+            text = stringResource(R.string.release_date_dd_mm_yy),
             mask = "xx/xx/xx",
             maskNumber = 'x',
             onDateChanged = { givenDate = it }
@@ -158,7 +158,7 @@ fun EditTerritory(database: TerritoryDatabase, navController: NavHostController,
 
         MaskField(
             date = returnDate,
-            text = "Date de retour (jj/mm/aa)",
+            text = stringResource(R.string.return_date_dd_mm_yy),
             mask = "xx/xx/xx",
             maskNumber = 'x',
             onDateChanged = { returnDate = it }
@@ -170,7 +170,7 @@ fun EditTerritory(database: TerritoryDatabase, navController: NavHostController,
             value = givenName,
             singleLine = true,
             onValueChange = { text -> givenName = text },
-            label = { Text("Nom du proclamateur") },
+            label = { Text(stringResource(R.string.name_of_publisher)) },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(
                 autoCorrect = true,
@@ -181,8 +181,9 @@ fun EditTerritory(database: TerritoryDatabase, navController: NavHostController,
         Spacer(modifier = Modifier.height(15.dp))
 
         Button(onClick = {
-            if (number.toIntOrNull() == null || number.isBlank() || name.isBlank() || (givenDate.length != 6 && givenDate != "") || (returnDate.length != 6 && returnDate != "") || givenName.isBlank())
+            if (number.toIntOrNull() == null || number.isBlank() || name.isBlank() || (givenDate.length != 6 && givenDate != "") || (returnDate.length != 6 && returnDate != ""))
                 error = true
+            else if (givenName.isBlank() && givenDate.isNotBlank()) error = true
             else {
                 updatetItem()
                 navController.popBackStack()
@@ -194,10 +195,10 @@ fun EditTerritory(database: TerritoryDatabase, navController: NavHostController,
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.rounded_save_24),
-                    contentDescription = "Enregistrer"
+                    contentDescription = stringResource(R.string.save)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
-                Text(text = "Enregistrer")
+                Text(text = stringResource(R.string.save))
             }
         }
 
@@ -215,17 +216,17 @@ fun EditTerritory(database: TerritoryDatabase, navController: NavHostController,
             ) {
                 Icon(
                     imageVector = Icons.Default.Delete,
-                    contentDescription = "Supprimer",
+                    contentDescription = stringResource(R.string.delete),
                     tint = MaterialTheme.colorScheme.onErrorContainer
                 )
                 Spacer(modifier = Modifier.width(6.dp))
-                Text(text = "Supprimer", color = MaterialTheme.colorScheme.onErrorContainer)
+                Text(text = stringResource(R.string.delete), color = MaterialTheme.colorScheme.onErrorContainer)
             }
         }
 
         if (error)
             Text(
-                text = "Verifiez les valeurs",
+                text = stringResource(R.string.check_values),
                 modifier = Modifier.padding(0.dp, 5.dp),
                 color = Color.Red
             )
@@ -235,11 +236,11 @@ fun EditTerritory(database: TerritoryDatabase, navController: NavHostController,
 
     if (showDialog)
         ConfirmationDialog(
-            title = "Suppression",
-            message = "Voulez-vous vraiment supprimer ce territoire ?",
+            title = stringResource(R.string.deletion),
+            message = stringResource(R.string.deletion_confirm),
             confirmButtonColor = MaterialTheme.colorScheme.errorContainer,
             confirmButtonTextColor = MaterialTheme.colorScheme.onErrorContainer,
-            confirmButtonText = "Supprimer",
+            confirmButtonText = stringResource(R.string.delete),
             onConfirm = {
                 showDialog = false
                 deleteItem()

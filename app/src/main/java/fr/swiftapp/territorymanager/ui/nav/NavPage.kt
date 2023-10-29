@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
@@ -63,7 +64,8 @@ import fr.swiftapp.territorymanager.ui.pages.TousPage
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavPage() {
-    val tabItems = listOf("Tous", "En cours", "Dispo")
+    val tabItems = listOf(stringResource(R.string.all), stringResource(R.string.in_progress), stringResource(R.string.available))
+    val tabItemsRoutes = listOf("All", "InProgress", "Available")
     var selectedItem by remember {
         mutableIntStateOf(0)
     }
@@ -85,13 +87,13 @@ fun NavPage() {
                     if (parentRouteName != null) {
                         Text(
                             text = when (parentRouteName) {
-                                "Tous" -> "Territoires"
-                                "En cours" -> "Territoire en cours"
-                                "Dispo" -> "Territoire disponible"
-                                "AddTerritory" -> "Ajouter un territoire"
+                                "All" -> stringResource(R.string.territories)
+                                "InProgress" -> stringResource(R.string.territories_in_working)
+                                "Available" -> stringResource(R.string.territories_dispo)
+                                "AddTerritory" -> stringResource(R.string.add_territory)
                                 else -> {
-                                    if (parentRouteName.contains("EditTerritory")) "Détails"
-                                    else "Loading..."
+                                    if (parentRouteName.contains("EditTerritory")) stringResource(R.string.details)
+                                    else stringResource(R.string.loading)
                                 }
                             },
                         )
@@ -109,7 +111,7 @@ fun NavPage() {
                             IconButton(onClick = { navController.popBackStack() }) {
                                 Icon(
                                     imageVector = Icons.Default.ArrowBack,
-                                    contentDescription = "Retour"
+                                    contentDescription = stringResource(R.string.back)
                                 )
                             }
                         }
@@ -133,7 +135,7 @@ fun NavPage() {
                             }) {
                                 Icon(
                                     imageVector = Icons.Default.Settings,
-                                    contentDescription = "Réglages"
+                                    contentDescription = stringResource(R.string.settings)
                                 )
                             }
                         }
@@ -144,7 +146,7 @@ fun NavPage() {
         },
         floatingActionButton = {
             AnimatedVisibility(
-                visible = parentRouteName == "Tous",
+                visible = parentRouteName == "All",
                 enter = fadeIn(initialAlpha = 0f),
                 exit = fadeOut()
             ) {
@@ -167,10 +169,10 @@ fun NavPage() {
                     ) {
                         Icon(
                             imageVector = Icons.Default.Add,
-                            contentDescription = "Ajouter un territoire"
+                            contentDescription = stringResource(R.string.add_territory)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = "Ajouter un territoire", fontSize = 16.sp)
+                        Text(text = stringResource(R.string.add_territory), fontSize = 16.sp)
                     }
                 }
             }
@@ -178,7 +180,7 @@ fun NavPage() {
         floatingActionButtonPosition = FabPosition.Center,
         bottomBar = {
             NavigationBar {
-                tabItems.forEachIndexed { index, item ->
+                tabItemsRoutes.forEachIndexed { index, item ->
                     NavigationBarItem(
                         selected = parentRouteName == item,
                         onClick = {
@@ -194,24 +196,24 @@ fun NavPage() {
                         },
                         icon = {
                             when (item) {
-                                "Tous" -> Icon(
+                                tabItemsRoutes[0] -> Icon(
                                     painter = painterResource(id = R.drawable.rounded_home_24),
-                                    contentDescription = "Home"
+                                    contentDescription = stringResource(R.string.home)
                                 )
 
-                                "En cours" -> Icon(
+                                tabItemsRoutes[1] -> Icon(
                                     painter = painterResource(id = R.drawable.rounded_logout_24),
-                                    contentDescription = "En cours"
+                                    contentDescription = stringResource(R.string.in_progress)
                                 )
 
-                                "Dispo" -> Icon(
+                                tabItemsRoutes[2] -> Icon(
                                     painter = painterResource(id = R.drawable.rounded_check_circle_24),
-                                    contentDescription = "Dispo"
+                                    contentDescription = stringResource(R.string.available)
                                 )
                             }
                         },
                         label = {
-                            Text(text = item)
+                            Text(text = tabItems[index])
                         },
                         alwaysShowLabel = false
                     )
@@ -227,8 +229,8 @@ fun NavPage() {
             navController = navController,
             startDestination = "Home"
         ) {
-            navigation(startDestination = "Tous", route = "Home") {
-                composable("Tous", deepLinks = listOf(NavDeepLink("deeplink://home"))) {
+            navigation(startDestination = "All", route = "Home") {
+                composable("All", deepLinks = listOf(NavDeepLink("deeplink://home"))) {
                     TousPage(database = db, navController = navController)
                 }
                 composable(
@@ -251,14 +253,14 @@ fun NavPage() {
             }
 
             composable(
-                "En cours",
+                "InProgress",
                 deepLinks = listOf(NavDeepLink("deeplink://enCours"))
             ) {
                 EnCoursPage(database = db)
             }
 
             composable(
-                "Dispo",
+                "Available",
                 deepLinks = listOf(NavDeepLink("deeplink://dispo"))
             ) {
                 DispoPage(database = db)

@@ -3,6 +3,7 @@ package fr.swiftapp.territorymanager
 import android.content.Intent
 import android.os.Bundle
 import android.provider.CalendarContract.Colors
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
@@ -48,6 +49,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -163,12 +165,12 @@ class SettingsActivity : ComponentActivity() {
                                     IconButton(onClick = { onBackPressedDispatcher.onBackPressed() }) {
                                         Icon(
                                             imageVector = Icons.Default.ArrowBack,
-                                            contentDescription = "Retour"
+                                            contentDescription = stringResource(R.string.back)
                                         )
                                     }
                                 },
                                 title = {
-                                    Text(text = "Options")
+                                    Text(text = stringResource(R.string.settings))
                                 },
                                 scrollBehavior = scrollBehavior
                             )
@@ -215,11 +217,11 @@ fun SettingsItems(padding: PaddingValues) {
 
     if (confirmVisible) {
         ConfirmationDialog(
-            title = "Importation",
-            message = "L'imporation d'un fichier json remplacera toutes les données actuelles",
+            title = stringResource(R.string.import_backup),
+            message = stringResource(R.string.import_warning),
             confirmButtonColor = MaterialTheme.colorScheme.primary,
             confirmButtonTextColor = MaterialTheme.colorScheme.onPrimary,
-            confirmButtonText = "Confirmer",
+            confirmButtonText = stringResource(R.string.confirm),
             onConfirm = {
                 val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                     addCategory(Intent.CATEGORY_OPENABLE)
@@ -250,13 +252,13 @@ fun SettingsItems(padding: PaddingValues) {
         ) {
             Column(Modifier.padding(15.dp)) {
                 Text(
-                    text = "Proclamateurs",
+                    text = stringResource(R.string.publishers),
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = "La liste des noms de tout les proclamateurs",
+                    text = stringResource(R.string.publishers_info),
                     fontSize = 14.sp,
                     lineHeight = 18.sp,
                     color = MaterialTheme.colorScheme.outline
@@ -289,13 +291,13 @@ fun SettingsItems(padding: PaddingValues) {
             ) {
                 Column(Modifier.weight(1f)) {
                     Text(
-                        text = "Exporter",
+                        text = stringResource(R.string.export),
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.height(5.dp))
                     Text(
-                        text = "Sauvegarder les noms et les territoires",
+                        text = stringResource(R.string.export_info),
                         fontSize = 14.sp,
                         lineHeight = 18.sp,
                         color = MaterialTheme.colorScheme.outline
@@ -304,7 +306,7 @@ fun SettingsItems(padding: PaddingValues) {
                 Spacer(modifier = Modifier.width(15.dp))
                 Icon(
                     painter = painterResource(id = R.drawable.rounded_arrow_circle_up_24),
-                    contentDescription = "Import data",
+                    contentDescription = stringResource(id = R.string.export_info),
                     modifier = Modifier.size(40.dp)
                 )
             }
@@ -329,13 +331,13 @@ fun SettingsItems(padding: PaddingValues) {
             ) {
                 Column(Modifier.weight(1f)) {
                     Text(
-                        text = "Importer",
+                        text = stringResource(R.string.import_btn),
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.height(5.dp))
                     Text(
-                        text = "Importer les noms et les territoires depuis un fichier .json",
+                        text = stringResource(R.string.import_btn_info),
                         fontSize = 14.sp,
                         lineHeight = 18.sp,
                         color = MaterialTheme.colorScheme.outline
@@ -344,7 +346,7 @@ fun SettingsItems(padding: PaddingValues) {
                 Spacer(modifier = Modifier.width(15.dp))
                 Icon(
                     painter = painterResource(id = R.drawable.rounded_arrow_circle_down_24),
-                    contentDescription = "Import data",
+                    contentDescription = stringResource(R.string.import_btn_info),
                     modifier = Modifier.size(40.dp)
                 )
             }
@@ -361,7 +363,7 @@ fun SettingsItems(padding: PaddingValues) {
         Spacer(modifier = Modifier.height(10.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = "This project is available on ",
+                text = stringResource(R.string.project_github_info),
             )
             HyperlinkText(
                 fullText = "GitHub",

@@ -18,11 +18,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import fr.swiftapp.territorymanager.R
 import fr.swiftapp.territorymanager.data.Territory
+import fr.swiftapp.territorymanager.ui.dialogs.ConfirmationDialog
 import fr.swiftapp.territorymanager.ui.dialogs.DialogName
 import fr.swiftapp.territorymanager.utils.formatDate
 import fr.swiftapp.territorymanager.utils.reverseDate
@@ -39,10 +42,12 @@ fun TerritoryListItem(
     var isOpen by remember {
         mutableStateOf(false)
     }
+    var isConfirm by remember {
+        mutableStateOf(false)
+    }
 
     DialogName(isOpen = isOpen, close = { name ->
-        isOpen = false
-        if (name != null) {
+        if (!name.isNullOrBlank()) {
             onSave(
                 territory.copy(
                     isAvailable = false,
@@ -52,7 +57,29 @@ fun TerritoryListItem(
                 )
             )
         }
+        isOpen = false
     })
+
+    if (isConfirm)
+        ConfirmationDialog(
+            title = stringResource(R.string.confirmation),
+            message = stringResource(R.string.confirm_return_territory, territory.name),
+            confirmButtonText = stringResource(R.string.confirm),
+            confirmButtonColor = MaterialTheme.colorScheme.primary,
+            confirmButtonTextColor = MaterialTheme.colorScheme.onPrimary,
+            onConfirm = {
+                onSave(
+                    territory.copy(
+                        isAvailable = true,
+                        returnDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                    )
+                )
+                isConfirm = false
+            },
+            onCancel = {
+                isConfirm = false
+            }
+        )
 
     Surface(
         color = MaterialTheme.colorScheme.secondaryContainer,
@@ -63,10 +90,11 @@ fun TerritoryListItem(
             .height(100.dp),
         onClick = {
             if (!isEdit) {
-                isOpen = true
-            } else {
-                editItem()
-            }
+                if (territory.isAvailable) isOpen = true
+                else {
+                    isConfirm = true
+                }
+            } else editItem()
         }
     ) {
         Row(
@@ -114,7 +142,7 @@ fun TerritoryListItem(
 
             Column(horizontalAlignment = Alignment.End) {
                 Text(
-                    text = if (territory.isAvailable) "Rentré le :" else "Sorti le :",
+                    text = if (territory.isAvailable) stringResource(R.string.returned_on) else stringResource(R.string.released_on),
                     fontSize = 15.sp,
                     color = MaterialTheme.colorScheme.outline
                 )
@@ -129,17 +157,8 @@ fun TerritoryListItem(
             Spacer(modifier = Modifier.width(15.dp))
 
             Switch(checked = !territory.isAvailable, onCheckedChange = {
-                if (it)
-                    isOpen = true
-                else {
-                    onSave(
-                        territory.copy(
-                            isAvailable = true,
-                            returnDate = LocalDate.now()
-                                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                        )
-                    )
-                }
+                if (it) isOpen = true
+                else isConfirm = true
             })
         }
     }

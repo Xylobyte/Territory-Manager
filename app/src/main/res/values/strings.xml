@@ -1,4 +1,47 @@
 <resources>
     <string name="app_name" translatable="false">Territory Manager</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="all">All</string>
+    <string name="in_progress">In progress</string>
+    <string name="available">Available</string>
+    <string name="territories">Territories</string>
+    <string name="territories_in_working">In progress territories</string>
+    <string name="territories_dispo">Territories available</string>
+    <string name="add_territory">Add a territory</string>
+    <string name="details">Details</string>
+    <string name="loading">Loading...</string>
+    <string name="back">Back</string>
+    <string name="settings">Settings</string>
+    <string name="home">Home</string>
+    <string name="cancel">Cancel</string>
+    <string name="name_of_publisher">Name of publisher</string>
+    <string name="save_and_assign">Register this publisher and assign</string>
+    <string name="assign">Assign</string>
+    <string name="no_names">No name registered</string>
+    <string name="close">Close</string>
+    <string name="delete">Delete</string>
+    <string name="returned_on">Returned on:</string>
+    <string name="released_on">Released on:</string>
+    <string name="number">Number</string>
+    <string name="territory_name">Territory name</string>
+    <string name="date_dd_mm_yy">Date (dd/mm/yy)</string>
+    <string name="save">Save</string>
+    <string name="check_values">Check the values</string>
+    <string name="no_territories">Aucun territoires</string>
+    <string name="release_date_dd_mm_yy">Release date (dd/mm/yy)</string>
+    <string name="return_date_dd_mm_yy">Date de retour (jj/mm/aa)</string>
+    <string name="deletion">Deletion</string>
+    <string name="deletion_confirm">Do you really want to delete this territory?</string>
+    <string name="confirmation">Confirmation</string>
+    <string name="confirm">Confirm</string>
+    <string name="confirm_return_territory">Do you really want to enter %1$s territory?</string>
+    <string name="import_backup">Import</string>
+    <string name="import_warning">Importing a json file will overwrite all current data</string>
+    <string name="publishers">Publishers</string>
+    <string name="publishers_info">List of names of all publishers</string>
+    <string name="export">Exporter</string>
+    <string name="export_info">Save names and territories</string>
+    <string name="import_btn">Import</string>
+    <string name="import_btn_info">Import names and territories from a .json file</string>
+    <string name="project_github_info">"This project is available on "</string>
 </resources>

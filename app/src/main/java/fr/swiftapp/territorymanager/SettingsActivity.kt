@@ -137,8 +137,7 @@ class SettingsActivity : ComponentActivity() {
                                 updateNamesList(this@SettingsActivity, json.get("names").asString)
 
                                 json.get("territories").asJsonArray.forEach {
-                                    db.territoryDao()
-                                        .insert(gson.fromJson(it, Territory::class.java))
+                                    db.territoryDao().insert(gson.fromJson(it, Territory::class.java))
                                 }
                             }
                         } catch (e: IOException) {

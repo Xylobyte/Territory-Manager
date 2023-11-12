@@ -88,7 +88,8 @@ fun EditTerritory(database: TerritoryDatabase, navController: NavHostController,
                 givenDate = convertDate(givenDate),
                 returnDate = convertDate(returnDate),
                 isAvailable = returnDate.isNotBlank(),
-                givenName = givenName
+                givenName = givenName,
+                isShops = it.isShops
             )
         }
 

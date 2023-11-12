@@ -27,7 +27,7 @@
     <string name="date_dd_mm_yy">Date (dd/mm/yy)</string>
     <string name="save">Save</string>
     <string name="check_values">Check the values</string>
-    <string name="no_territories">Aucun territoires</string>
+    <string name="no_territories">No territories</string>
     <string name="release_date_dd_mm_yy">Release date (dd/mm/yy)</string>
     <string name="return_date_dd_mm_yy">Date de retour (jj/mm/aa)</string>
     <string name="deletion">Deletion</string>
@@ -44,4 +44,6 @@
     <string name="import_btn">Import</string>
     <string name="import_btn_info">Import names and territories from a .json file</string>
     <string name="project_github_info">"This project is available on "</string>
+    <string name="territories_out">territories released</string>
+    <string name="territories_in">territories returned</string>
 </resources>

@@ -82,7 +82,8 @@ fun AddTerritoryPage(database: TerritoryDatabase, navController: NavHostControll
             givenDate = "",
             returnDate = convertDate(date),
             isAvailable = true,
-            givenName = ""
+            givenName = "",
+            isShops = false
         )
 
         coroutineScope.launch {

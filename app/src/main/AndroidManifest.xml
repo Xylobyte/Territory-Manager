@@ -16,6 +16,7 @@
         <activity
             android:name=".ChangesActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_changes"
             android:theme="@style/Theme.TerritoryManager" />
         <activity

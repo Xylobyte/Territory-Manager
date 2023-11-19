@@ -40,6 +40,7 @@ import fr.swiftapp.territorymanager.R
 import fr.swiftapp.territorymanager.data.Territory
 import fr.swiftapp.territorymanager.data.TerritoryDatabase
 import fr.swiftapp.territorymanager.ui.components.MaskField
+import fr.swiftapp.territorymanager.ui.components.MaterialButtonToggleGroup
 import fr.swiftapp.territorymanager.ui.dialogs.ConfirmationDialog
 import fr.swiftapp.territorymanager.utils.convertDate
 import fr.swiftapp.territorymanager.utils.reverseDate
@@ -50,6 +51,9 @@ fun EditTerritory(database: TerritoryDatabase, navController: NavHostController,
     val territory =
         id?.let { database.territoryDao().getById(it).collectAsState(initial = null).value }
 
+    var isShops by remember {
+        mutableStateOf(false)
+    }
     var number by remember {
         mutableStateOf("")
     }
@@ -72,6 +76,7 @@ fun EditTerritory(database: TerritoryDatabase, navController: NavHostController,
         givenDate = reverseDate(territory?.givenDate.toString())
         returnDate = reverseDate(territory?.returnDate.toString())
         givenName = reverseDate(territory?.givenName.toString())
+        isShops = territory?.isShops == true
     }
 
     var error by remember {
@@ -89,7 +94,7 @@ fun EditTerritory(database: TerritoryDatabase, navController: NavHostController,
                 returnDate = convertDate(returnDate),
                 isAvailable = returnDate.isNotBlank(),
                 givenName = givenName,
-                isShops = it.isShops
+                isShops = isShops
             )
         }
 
@@ -118,6 +123,13 @@ fun EditTerritory(database: TerritoryDatabase, navController: NavHostController,
             .verticalScroll(rememberScrollState())
             .padding(16.dp, 0.dp)
     ) {
+        MaterialButtonToggleGroup(
+            items = listOf(stringResource(id = R.string.territories), stringResource(R.string.shops)),
+            value = if (isShops) 1 else 0,
+            modifier = Modifier.fillMaxWidth().padding(0.dp, 10.dp),
+            onClick = { isShops = it == 1 }
+        )
+
         OutlinedTextField(
             value = number,
             singleLine = true,

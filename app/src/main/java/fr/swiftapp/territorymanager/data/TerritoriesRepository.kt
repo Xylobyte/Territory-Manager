@@ -5,11 +5,11 @@ import kotlinx.coroutines.flow.Flow
 interface TerritoriesRepository {
     fun exportAllStream(): Flow<List<Territory>>
 
-    fun getAllGivenStream(): Flow<List<Territory>>
+    fun getAllGivenStream(isShops: Int): Flow<List<Territory>>
 
-    fun getAllAvailableStream(): Flow<List<Territory>>
+    fun getAllAvailableStream(isShops: Int): Flow<List<Territory>>
 
-    fun getAllStream(): Flow<List<Territory>>
+    fun getAllStream(isShops: Int): Flow<List<Territory>>
 
     fun getByIdStream(id: Int): Flow<Territory>
 

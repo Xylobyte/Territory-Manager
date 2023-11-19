@@ -1,5 +1,6 @@
 package fr.swiftapp.territorymanager.ui.pages
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -44,6 +45,7 @@ import fr.swiftapp.territorymanager.R
 import fr.swiftapp.territorymanager.data.Territory
 import fr.swiftapp.territorymanager.data.TerritoryDatabase
 import fr.swiftapp.territorymanager.ui.components.MaskField
+import fr.swiftapp.territorymanager.ui.components.MaterialButtonToggleGroup
 import fr.swiftapp.territorymanager.utils.convertDate
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -51,6 +53,9 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AddTerritoryPage(database: TerritoryDatabase, navController: NavHostController) {
+    var isShops by remember {
+        mutableStateOf(false)
+    }
     var number by remember {
         mutableStateOf("")
     }
@@ -83,7 +88,7 @@ fun AddTerritoryPage(database: TerritoryDatabase, navController: NavHostControll
             returnDate = convertDate(date),
             isAvailable = true,
             givenName = "",
-            isShops = false
+            isShops = isShops
         )
 
         coroutineScope.launch {
@@ -97,6 +102,13 @@ fun AddTerritoryPage(database: TerritoryDatabase, navController: NavHostControll
             .verticalScroll(rememberScrollState())
             .padding(16.dp, 0.dp)
     ) {
+        MaterialButtonToggleGroup(
+            items = listOf(stringResource(id = R.string.territories), stringResource(R.string.shops)),
+            value = if (isShops) 1 else 0,
+            modifier = Modifier.fillMaxWidth().padding(0.dp, 10.dp),
+            onClick = { isShops = it == 1 }
+        )
+
         OutlinedTextField(
             value = number,
             singleLine = true,

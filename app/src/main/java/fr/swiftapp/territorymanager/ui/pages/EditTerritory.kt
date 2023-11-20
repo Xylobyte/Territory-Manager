@@ -121,7 +121,7 @@ fun EditTerritory(database: TerritoryDatabase, navController: NavHostController,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .verticalScroll(rememberScrollState())
-            .padding(16.dp, 0.dp)
+            .padding(10.dp, 0.dp)
     ) {
         MaterialButtonToggleGroup(
             items = listOf(stringResource(id = R.string.territories), stringResource(R.string.shops)),

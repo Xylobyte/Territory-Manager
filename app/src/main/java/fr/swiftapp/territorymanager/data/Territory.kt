@@ -28,6 +28,6 @@ data class Territory(
     @ColumnInfo(name = "givenName")
     val givenName: String,
 
-    @ColumnInfo(name = "isShops")
-    val isShops: Boolean?
+    @ColumnInfo(name = "isShops", defaultValue = "false")
+    val isShops: Boolean
 )

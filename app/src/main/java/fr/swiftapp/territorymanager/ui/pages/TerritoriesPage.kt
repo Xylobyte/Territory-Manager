@@ -1,5 +1,6 @@
 package fr.swiftapp.territorymanager.ui.pages
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -30,20 +32,23 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.navOptions
 import fr.swiftapp.territorymanager.R
 import fr.swiftapp.territorymanager.data.Territory
 import fr.swiftapp.territorymanager.data.TerritoryDatabase
-import fr.swiftapp.territorymanager.settings.getNameList
 import fr.swiftapp.territorymanager.settings.getNameListAsFlow
 import fr.swiftapp.territorymanager.ui.components.ChipWithSubItems
 import fr.swiftapp.territorymanager.ui.components.MaterialButtonToggleGroup
@@ -60,6 +65,9 @@ fun TerritoriesPage(database: TerritoryDatabase, navController: NavController) {
     }
     var publisher by remember {
         mutableIntStateOf(0)
+    }
+    var publisherBkp by rememberSaveable {
+        mutableStateOf("")
     }
 
     val names = getNameListAsFlow(LocalContext.current).collectAsState(initial = "")
@@ -82,18 +90,50 @@ fun TerritoriesPage(database: TerritoryDatabase, navController: NavController) {
         scrollState.animateScrollToItem(0)
     }
 
-    LaunchedEffect(status, territories.value, Unit) {
+    LaunchedEffect(status, publisher, territories.value, Unit) {
         finalList.clear()
+        val tmpTerritories: ArrayList<Territory> = ArrayList()
+
         when (status) {
             0 -> {
-                finalList.addAll(territories.value)
+                tmpTerritories.addAll(territories.value)
             }
+
             1 -> {
-                finalList.addAll(territories.value.filter { it.isAvailable }.sortedBy { it.returnDate })
+                tmpTerritories.addAll(territories.value.filter { it.isAvailable }.sortedBy { it.returnDate })
+                publisher = 0
             }
+
             2 -> {
-                finalList.addAll(territories.value.filter { !it.isAvailable }.sortedBy { it.givenDate })
+                tmpTerritories.addAll(territories.value.filter { !it.isAvailable }.sortedBy { it.givenDate })
             }
+        }
+
+        if (publisher > 0) {
+            finalList.addAll(tmpTerritories.filter { it.givenName == names.value?.split(',')?.get(publisher - 1) && !it.isAvailable })
+        } else {
+            finalList.addAll(tmpTerritories)
+        }
+    }
+
+    val owner = LocalLifecycleOwner.current
+    DisposableEffect(owner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_PAUSE) {
+                if (publisher > 0)
+                    publisherBkp = names.value?.split(',')?.get(publisher - 1) ?: ""
+                publisher = 0
+            } else if (event == Lifecycle.Event.ON_RESUME) {
+                if (publisherBkp.isNotEmpty()) {
+                    val i = names.value?.split(',')?.indexOf(publisherBkp) ?: 0
+                    if (i >= 0) publisher = i + 1
+                }
+            }
+        }
+        owner.lifecycle.addObserver(observer)
+
+        onDispose {
+            owner.lifecycle.removeObserver(observer)
         }
     }
 
@@ -111,7 +151,7 @@ fun TerritoriesPage(database: TerritoryDatabase, navController: NavController) {
             modifier = Modifier
                 .padding(10.dp, 4.dp)
                 .horizontalScroll(rememberScrollState()),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             ChipWithSubItems(
                 chipLabel = "Status : ",
@@ -120,14 +160,15 @@ fun TerritoriesPage(database: TerritoryDatabase, navController: NavController) {
                 value = status
             )
 
-            names.value?.split(',')?.let { listOf("Tous les proclamateurs", *it.toTypedArray()) }?.let {list ->
-                ChipWithSubItems(
-                    chipLabel = "",
-                    chipItems = list,
-                    onClick = { publisher = it },
-                    value = publisher
-                )
-            }
+            if (status != 1)
+                names.value?.split(',')?.let { listOf("Tous les proclamateurs", *it.toTypedArray()) }?.let { list ->
+                    ChipWithSubItems(
+                        chipLabel = "",
+                        chipItems = list,
+                        onClick = { publisher = it },
+                        value = publisher
+                    )
+                }
         }
 
         if (finalList.isEmpty()) {
@@ -139,30 +180,71 @@ fun TerritoriesPage(database: TerritoryDatabase, navController: NavController) {
                 )
             }
         } else {
-            LazyColumn(modifier = Modifier.fillMaxSize(), state = scrollState) {
-                items(finalList) { territory ->
-                    key(territory.id) {
-                        TerritoryListItem(
-                            territory,
-                            true,
-                            { updateItem(it) },
-                            {
-                                navController.navigate("EditTerritory/${territory.id}", navOptions {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
-                                    }
+            Box {
+                LazyColumn(modifier = Modifier.fillMaxSize(), state = scrollState) {
+                    item {
+                        Spacer(modifier = Modifier.height(15.dp))
+                    }
 
-                                    launchSingleTop = true
-                                    restoreState = true
-                                })
-                            }
+                    items(finalList) { territory ->
+                        key(territory.id) {
+                            TerritoryListItem(
+                                territory,
+                                true,
+                                { updateItem(it) },
+                                {
+                                    navController.navigate("EditTerritory/${territory.id}", navOptions {
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
+
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    })
+                                }
+                            )
+                        }
+                    }
+
+                    item {
+                        Text(
+                            text = "${finalList.size} ${stringResource(id = R.string.territories)}",
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.outline
                         )
+                        Spacer(modifier = Modifier.height(90.dp))
                     }
                 }
 
-                item {
-                    Spacer(modifier = Modifier.height(80.dp))
-                }
+                Spacer(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(25.dp)
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(
+                                    MaterialTheme.colorScheme.surface,
+                                    Color.Transparent
+                                )
+                            )
+                        )
+                )
+
+                Spacer(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(25.dp)
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(
+                                    Color.Transparent,
+                                    MaterialTheme.colorScheme.surface
+                                )
+                            )
+                        )
+                        .align(Alignment.BottomCenter)
+                )
             }
         }
     }

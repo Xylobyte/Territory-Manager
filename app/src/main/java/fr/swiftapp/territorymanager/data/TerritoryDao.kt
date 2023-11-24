@@ -10,13 +10,13 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TerritoryDao {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(Territory::class, onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(territory: Territory)
 
-    @Update
+    @Update(Territory::class, onConflict = OnConflictStrategy.REPLACE)
     suspend fun update(territory: Territory)
 
-    @Delete
+    @Delete(Territory::class)
     suspend fun delete(territory: Territory)
 
     @Query("DELETE FROM territories")
@@ -30,10 +30,4 @@ interface TerritoryDao {
 
     @Query("SELECT * FROM territories")
     fun exportAll(): Flow<List<Territory>>
-
-    @Query("SELECT * FROM territories WHERE isAvailable = 1 AND isShops = :isShops ORDER BY returnDate ASC")
-    fun getAllAvailable(isShops: Int): Flow<List<Territory>>
-
-    @Query("SELECT * FROM territories WHERE isAvailable = 0 AND isShops = :isShops ORDER BY givenDate ASC")
-    fun getAllGiven(isShops: Int): Flow<List<Territory>>
 }

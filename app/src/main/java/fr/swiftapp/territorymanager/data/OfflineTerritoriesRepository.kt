@@ -5,10 +5,6 @@ import kotlinx.coroutines.flow.Flow
 class OfflineTerritoriesRepository(private val territoryDao: TerritoryDao) : TerritoriesRepository {
     override fun exportAllStream(): Flow<List<Territory>> = territoryDao.exportAll()
 
-    override fun getAllGivenStream(isShops: Int): Flow<List<Territory>> = territoryDao.getAllGiven(isShops)
-
-    override fun getAllAvailableStream(isShops: Int): Flow<List<Territory>> = territoryDao.getAllAvailable(isShops)
-
     override fun getAllStream(isShops: Int): Flow<List<Territory>> = territoryDao.getAll(isShops)
 
     override fun getByIdStream(id: Int): Flow<Territory> = territoryDao.getById(id)

@@ -19,6 +19,9 @@ interface TerritoryDao {
     @Delete
     suspend fun delete(territory: Territory)
 
+    @Query("DELETE FROM territories")
+    suspend fun deleteAll()
+
     @Query("SELECT * FROM territories WHERE id = :id")
     fun getById(id: Int): Flow<Territory>
 

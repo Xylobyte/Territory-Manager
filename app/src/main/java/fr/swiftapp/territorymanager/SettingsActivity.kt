@@ -136,6 +136,7 @@ class SettingsActivity : ComponentActivity() {
                             lifecycleScope.launch {
                                 updateNamesList(this@SettingsActivity, json.get("names").asString)
 
+                                db.territoryDao().deleteAll()
                                 json.get("territories").asJsonArray.forEach {
                                     db.territoryDao().insert(gson.fromJson(it, Territory::class.java))
                                 }

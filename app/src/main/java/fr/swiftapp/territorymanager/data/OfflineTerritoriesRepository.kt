@@ -18,4 +18,6 @@ class OfflineTerritoriesRepository(private val territoryDao: TerritoryDao) : Ter
     override suspend fun update(territory: Territory) = territoryDao.update(territory)
 
     override suspend fun delete(territory: Territory) = territoryDao.delete(territory)
+
+    override suspend fun deleteAll() = territoryDao.deleteAll()
 }

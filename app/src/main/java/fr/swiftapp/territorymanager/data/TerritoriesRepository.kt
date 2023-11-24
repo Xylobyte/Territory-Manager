@@ -18,4 +18,6 @@ interface TerritoriesRepository {
     suspend fun update(territory: Territory)
 
     suspend fun delete(territory: Territory)
+
+    suspend fun deleteAll()
 }

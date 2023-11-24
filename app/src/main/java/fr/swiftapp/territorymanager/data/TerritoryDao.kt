@@ -30,4 +30,13 @@ interface TerritoryDao {
 
     @Query("SELECT * FROM territories")
     fun exportAll(): Flow<List<Territory>>
+
+    @Insert(TerritoryChanges::class, onConflict = OnConflictStrategy.IGNORE)
+    suspend fun pushChange(change: TerritoryChanges)
+
+    @Query("SELECT * FROM territories_changes ORDER BY id ASC")
+    fun getAllChanges(): Flow<List<TerritoryChanges>>
+
+    @Query("DELETE FROM territories_changes")
+    suspend fun deleteAllChanges()
 }

@@ -13,6 +13,9 @@ data class TerritoryChanges(
     @ColumnInfo(name = "territoryId")
     val territoryId: Int,
 
+    @ColumnInfo(name = "territoryNumber")
+    val territoryNumber: Int,
+
     @ColumnInfo(name = "territoryName")
     val territoryName: String,
 

@@ -236,7 +236,7 @@ fun SettingsItems(padding: PaddingValues) {
         modifier = Modifier
             .padding(padding)
             .verticalScroll(rememberScrollState())
-            .padding(10.dp),
+            .padding(10.dp, 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Surface(

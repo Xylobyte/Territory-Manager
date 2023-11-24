@@ -4,8 +4,19 @@ An app to manage territory attribution.
 
 ## Screenshot
 <img src="/screenshots/home.png" width="300"/>
+<img src="/screenshots/settings.png" width="300"/>
 
 ## Download
+
+---------------------
+
+⚠️ **Important Notice: Backup your data!**
+
+Before diving into the exciting new version of my app, make sure to safeguard your precious data. Changes are awesome, but losing data isn't. Take a moment to back up your information to ensure a smooth transition.
+
+Happy exploring! 🚀
+
+----------------------
 
 The beta 1 version has been released !
 

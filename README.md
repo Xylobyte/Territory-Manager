@@ -3,8 +3,7 @@
 An app to manage territory attribution.
 
 ## Screenshot
-<img src="/screenshots/home.png" width="300"/>
-<img src="/screenshots/settings.png" width="300"/>
+<img src="/screenshots/home.png" width="300"/> <img src="/screenshots/settings.png" width="300"/>
 
 ## Download
 

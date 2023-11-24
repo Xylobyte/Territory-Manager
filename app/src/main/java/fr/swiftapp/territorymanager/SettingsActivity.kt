@@ -136,9 +136,9 @@ class SettingsActivity : ComponentActivity() {
                             lifecycleScope.launch {
                                 updateNamesList(this@SettingsActivity, json.get("names").asString)
 
+                                db.territoryDao().deleteAll()
                                 json.get("territories").asJsonArray.forEach {
-                                    db.territoryDao()
-                                        .insert(gson.fromJson(it, Territory::class.java))
+                                    db.territoryDao().insert(gson.fromJson(it, Territory::class.java))
                                 }
                             }
                         } catch (e: IOException) {
@@ -237,7 +237,7 @@ fun SettingsItems(padding: PaddingValues) {
         modifier = Modifier
             .padding(padding)
             .verticalScroll(rememberScrollState())
-            .padding(10.dp),
+            .padding(10.dp, 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Surface(

@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="title_activity_settings">Réglages</string>
-    <string name="all">Tous</string>
-    <string name="in_progress">En cours</string>
-    <string name="available">Dispo</string>
+    <string name="changes">Changements</string>
+    <string name="available">Disponible</string>
     <string name="territories">Territoires</string>
-    <string name="territories_in_working">Territoires en cours</string>
-    <string name="territories_dispo">Territoires disponibles</string>
     <string name="add_territory">Ajouter un territoire</string>
     <string name="details">Détails</string>
     <string name="loading">Chargement...</string>
@@ -27,7 +24,7 @@
     <string name="date_dd_mm_yy">Date (jj/mm/aa)</string>
     <string name="save">Enregistrer</string>
     <string name="check_values">Verifiez les valeurs</string>
-    <string name="no_territories">No territories</string>
+    <string name="no_territories">Aucun territoires</string>
     <string name="release_date_dd_mm_yy">Date de sortie (jj/mm/aa)</string>
     <string name="return_date_dd_mm_yy">Return date (dd/mm/yy)</string>
     <string name="deletion">Suppression</string>
@@ -44,4 +41,10 @@
     <string name="import_btn">Importer</string>
     <string name="import_btn_info">Importer les noms et les territoires depuis un fichier .json</string>
     <string name="project_github_info">"Ce projet est disponible sur "</string>
+    <string name="territories_out">territoires sortis</string>
+    <string name="territories_in">territoires rentré</string>
+    <string name="shops">Commerces</string>
+    <string name="all">Tout</string>
+    <string name="in_progress">En cours</string>
+    <string name="title_activity_changes">Historique des changements</string>
 </resources>

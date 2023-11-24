@@ -1,12 +1,9 @@
 <resources>
     <string name="app_name" translatable="false">Territory Manager</string>
     <string name="title_activity_settings">Settings</string>
-    <string name="all">All</string>
-    <string name="in_progress">In progress</string>
+    <string name="changes">Changes</string>
     <string name="available">Available</string>
     <string name="territories">Territories</string>
-    <string name="territories_in_working">In progress territories</string>
-    <string name="territories_dispo">Territories available</string>
     <string name="add_territory">Add a territory</string>
     <string name="details">Details</string>
     <string name="loading">Loading...</string>
@@ -27,7 +24,7 @@
     <string name="date_dd_mm_yy">Date (dd/mm/yy)</string>
     <string name="save">Save</string>
     <string name="check_values">Check the values</string>
-    <string name="no_territories">Aucun territoires</string>
+    <string name="no_territories">No territories</string>
     <string name="release_date_dd_mm_yy">Release date (dd/mm/yy)</string>
     <string name="return_date_dd_mm_yy">Date de retour (jj/mm/aa)</string>
     <string name="deletion">Deletion</string>
@@ -44,4 +41,10 @@
     <string name="import_btn">Import</string>
     <string name="import_btn_info">Import names and territories from a .json file</string>
     <string name="project_github_info">"This project is available on "</string>
+    <string name="territories_out">territories released</string>
+    <string name="territories_in">territories returned</string>
+    <string name="shops">Shops</string>
+    <string name="title_activity_changes">Changes history</string>
+    <string name="all">All</string>
+    <string name="in_progress">In progress</string>
 </resources>

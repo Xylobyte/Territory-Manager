@@ -31,12 +31,20 @@ interface TerritoryDao {
     @Query("SELECT * FROM territories")
     fun exportAll(): Flow<List<Territory>>
 
+    /* ----------------------------- CHANGES ----------------------------- */
+
     @Insert(TerritoryChanges::class, onConflict = OnConflictStrategy.IGNORE)
     suspend fun pushChange(change: TerritoryChanges)
 
-    @Query("SELECT * FROM territories_changes ORDER BY id ASC")
-    fun getAllChanges(): Flow<List<TerritoryChanges>>
-
     @Query("DELETE FROM territories_changes")
     suspend fun deleteAllChanges()
+
+    @Query("UPDATE territories_changes SET isSaved = 1 WHERE id = :id")
+    suspend fun markChangeAsSaved(id: Int)
+
+    @Query("SELECT * FROM territories_changes ORDER BY id DESC")
+    fun getAllChanges(): Flow<List<TerritoryChanges>>
+
+    @Query("SELECT * FROM territories_changes")
+    fun exportAllChanges(): Flow<List<TerritoryChanges>>
 }

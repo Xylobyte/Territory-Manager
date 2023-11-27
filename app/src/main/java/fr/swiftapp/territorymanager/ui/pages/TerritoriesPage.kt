@@ -5,15 +5,17 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -84,12 +86,6 @@ fun TerritoriesPage(database: TerritoryDatabase, navController: NavController) {
         }
     }
 
-    val scrollState = rememberLazyListState()
-
-    LaunchedEffect(Unit) {
-        scrollState.animateScrollToItem(0)
-    }
-
     LaunchedEffect(status, publisher, territories.value, Unit) {
         finalList.clear()
         val tmpTerritories: ArrayList<Territory> = ArrayList()
@@ -110,7 +106,7 @@ fun TerritoriesPage(database: TerritoryDatabase, navController: NavController) {
         }
 
         if (publisher > 0) {
-            finalList.addAll(tmpTerritories.filter { it.givenName == names.value?.split(',')?.get(publisher - 1) && !it.isAvailable })
+            finalList.addAll(tmpTerritories.filter { it.givenName == names.value?.split(',')?.sortedBy { it }?.get(publisher - 1) && !it.isAvailable })
         } else {
             finalList.addAll(tmpTerritories)
         }
@@ -139,7 +135,7 @@ fun TerritoriesPage(database: TerritoryDatabase, navController: NavController) {
 
     Column {
         MaterialButtonToggleGroup(
-            items = listOf(stringResource(id = R.string.territories), stringResource(R.string.shops)),
+            items = listOf(stringResource(R.string.territories), stringResource(R.string.shops)),
             value = if (isShops) 1 else 0,
             modifier = Modifier
                 .fillMaxWidth()
@@ -147,28 +143,62 @@ fun TerritoriesPage(database: TerritoryDatabase, navController: NavController) {
             onClick = { isShops = it == 1 }
         )
 
-        Row(
-            modifier = Modifier
-                .padding(10.dp, 4.dp)
-                .horizontalScroll(rememberScrollState()),
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-        ) {
-            ChipWithSubItems(
-                chipLabel = "Status : ",
-                chipItems = listOf(stringResource(R.string.all), stringResource(id = R.string.available), stringResource(R.string.in_progress)),
-                onClick = { status = it },
-                value = status
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .padding(0.dp, 4.dp)
+            .height(IntrinsicSize.Min)) {
+            Row(
+                modifier = Modifier.horizontalScroll(rememberScrollState()),
+            ) {
+                ChipWithSubItems(
+                    chipLabel = "Status : ",
+                    chipItems = listOf(stringResource(R.string.all), stringResource(id = R.string.available), stringResource(R.string.in_progress)),
+                    onClick = { status = it },
+                    value = status
+                )
+
+                if (status != 1)
+                    names.value?.split(',')?.sortedBy { it }?.let { listOf("Tous les proclamateurs", *it.toTypedArray()) }?.let { list ->
+                        ChipWithSubItems(
+                            chipLabel = "",
+                            chipItems = list,
+                            onClick = { publisher = it },
+                            value = publisher
+                        )
+                    }
+
+                Spacer(modifier = Modifier.width(10.dp))
+            }
+
+            Spacer(
+                Modifier
+                    .width(10.dp)
+                    .fillMaxHeight()
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(
+                                MaterialTheme.colorScheme.surface,
+                                Color.Transparent
+                            )
+                        )
+                    )
+                    .align(Alignment.CenterStart)
             )
 
-            if (status != 1)
-                names.value?.split(',')?.let { listOf("Tous les proclamateurs", *it.toTypedArray()) }?.let { list ->
-                    ChipWithSubItems(
-                        chipLabel = "",
-                        chipItems = list,
-                        onClick = { publisher = it },
-                        value = publisher
+            Spacer(
+                Modifier
+                    .width(10.dp)
+                    .fillMaxHeight()
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(
+                                Color.Transparent,
+                                MaterialTheme.colorScheme.surface
+                            )
+                        )
                     )
-                }
+                    .align(Alignment.CenterEnd)
+            )
         }
 
         if (finalList.isEmpty()) {
@@ -180,8 +210,8 @@ fun TerritoriesPage(database: TerritoryDatabase, navController: NavController) {
                 )
             }
         } else {
-            Box {
-                LazyColumn(modifier = Modifier.fillMaxSize(), state = scrollState) {
+            Box(modifier = Modifier.weight(2f)) {
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
                     item {
                         Spacer(modifier = Modifier.height(15.dp))
                     }

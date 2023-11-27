@@ -99,18 +99,18 @@ fun NavPage() {
                     }
                 },
                 actions = {
-//                    IconButton(onClick = {
-//                        startActivity(
-//                            context,
-//                            Intent(context, ChangesActivity::class.java),
-//                            null
-//                        )
-//                    }) {
-//                        Icon(
-//                            painter = painterResource(id = R.drawable.rounded_history_24),
-//                            contentDescription = stringResource(R.string.settings)
-//                        )
-//                    }
+                    IconButton(onClick = {
+                        startActivity(
+                            context,
+                            Intent(context, ChangesActivity::class.java),
+                            null
+                        )
+                    }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.rounded_history_24),
+                            contentDescription = stringResource(R.string.settings)
+                        )
+                    }
                     IconButton(onClick = {
                         startActivity(
                             context,

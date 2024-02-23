@@ -16,4 +16,16 @@ interface TerritoriesRepository {
     suspend fun delete(territory: Territory)
 
     suspend fun deleteAll()
+
+    /* ----------------------------- CHANGES ----------------------------- */
+
+    suspend fun pushChange(change: TerritoryChanges)
+
+    suspend fun deleteAllChanges()
+
+    suspend fun markChangeAsSaved(id: Int)
+
+    fun getAllChanges(): Flow<List<TerritoryChanges>>
+
+    fun exportAllChanges(): Flow<List<TerritoryChanges>>
 }

@@ -36,7 +36,7 @@ interface TerritoryDao {
     @Insert(TerritoryChanges::class, onConflict = OnConflictStrategy.IGNORE)
     suspend fun pushChange(change: TerritoryChanges)
 
-    @Query("DELETE FROM territories_changes")
+    @Query("DELETE FROM territories_changes WHERE isSaved = 1")
     suspend fun deleteAllChanges()
 
     @Query("UPDATE territories_changes SET isSaved = 1 WHERE id = :id")

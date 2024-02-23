@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -106,7 +107,9 @@ fun TerritoriesPage(database: TerritoryDatabase, navController: NavController) {
         }
 
         if (publisher > 0) {
-            finalList.addAll(tmpTerritories.filter { it.givenName == names.value?.split(',')?.sortedBy { it }?.get(publisher - 1) && !it.isAvailable })
+            finalList.addAll(tmpTerritories.filter {
+                it.givenName == names.value?.split(',')?.sortedBy { it }?.get(publisher - 1) && !it.isAvailable
+            })
         } else {
             finalList.addAll(tmpTerritories)
         }
@@ -210,7 +213,7 @@ fun TerritoriesPage(database: TerritoryDatabase, navController: NavController) {
                 )
             }
         } else {
-            Box(modifier = Modifier.weight(2f)) {
+            Box(modifier = Modifier.weight(2f).height(500.dp)) {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     item {
                         Spacer(modifier = Modifier.height(15.dp))

@@ -16,4 +16,16 @@ class OfflineTerritoriesRepository(private val territoryDao: TerritoryDao) : Ter
     override suspend fun delete(territory: Territory) = territoryDao.delete(territory)
 
     override suspend fun deleteAll() = territoryDao.deleteAll()
+
+    /* ----------------------------- CHANGES ----------------------------- */
+
+    override suspend fun pushChange(change: TerritoryChanges) = territoryDao.pushChange(change)
+
+    override suspend fun deleteAllChanges() = territoryDao.deleteAllChanges()
+
+    override suspend fun markChangeAsSaved(id: Int) = territoryDao.markChangeAsSaved(id)
+
+    override fun getAllChanges(): Flow<List<TerritoryChanges>> = territoryDao.getAllChanges()
+
+    override fun exportAllChanges(): Flow<List<TerritoryChanges>> = territoryDao.exportAllChanges()
 }

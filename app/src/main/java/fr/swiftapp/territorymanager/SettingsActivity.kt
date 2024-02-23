@@ -84,17 +84,20 @@ class SettingsActivity : ComponentActivity() {
                     val uri = result.data?.data
                     if (uri != null) {
                         lifecycleScope.launch {
-                            db.territoryDao().exportAll().collect {
-                                val names = getNameList(this@SettingsActivity)
-                                val gson =
-                                    GsonBuilder().serializeNulls().disableHtmlEscaping().create()
+                            db.territoryDao().exportAll().collect {t ->
+                                db.territoryDao().exportAllChanges().collect {tc ->
+                                    val names = getNameList(this@SettingsActivity)
+                                    val gson =
+                                        GsonBuilder().serializeNulls().disableHtmlEscaping().create()
 
-                                val json = JsonObject()
-                                json.addProperty("names", names)
-                                json.add("territories", gson.toJsonTree(it))
+                                    val json = JsonObject()
+                                    json.addProperty("names", names)
+                                    json.add("territories", gson.toJsonTree(t))
+                                    json.add("territories_changes", gson.toJsonTree(tc))
 
-                                contentResolver.openOutputStream(uri)?.use { out ->
-                                    out.write(json.toString().toByteArray())
+                                    contentResolver.openOutputStream(uri)?.use { out ->
+                                        out.write(json.toString().toByteArray())
+                                    }
                                 }
                             }
                         }

@@ -54,7 +54,7 @@ import fr.swiftapp.territorymanager.ui.pages.TerritoriesPage
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavPage() {
-    var navController = rememberNavController()
+    val navController = rememberNavController()
     val navBackStackEntry = navController.currentBackStackEntryAsState()
     val parentRouteName = navBackStackEntry.value?.destination?.route
 

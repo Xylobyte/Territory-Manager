@@ -13,8 +13,8 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AlertDialogDefaults
-import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -81,7 +81,7 @@ fun DialogName(isOpen: Boolean, close: (name: String?) -> Unit) {
             }
         }
 
-        BasicAlertDialog(
+        AlertDialog(
             onDismissRequest = {
                 close(null)
             }
